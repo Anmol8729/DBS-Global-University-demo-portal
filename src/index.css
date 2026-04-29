@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 8%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 8%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 8%;
+
+    --primary: 270 50% 30%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 270 10% 96%;
+    --secondary-foreground: 270 20% 20%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 45 95% 50%;
+    --accent-foreground: 0 0% 5%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 270 50% 30%;
+
+    --radius: 0.5rem;
+
+    --purple-deep: 270 50% 16%;
+    --purple-vivid: 270 45% 38%;
+    --purple-light: 270 35% 60%;
+    --purple-glow: 270 60% 48%;
+    --gold: 45 95% 50%;
+    --gold-light: 45 85% 65%;
+    --dark: 0 0% 6%;
+    --dark-muted: 0 0% 12%;
+    --dark-surface: 0 0% 10%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    overscroll-behavior-y: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/10 backdrop-blur-xl border border-white/15;
+  }
+
+  .glass-dark {
+    @apply bg-black/30 backdrop-blur-xl border border-white/10;
+  }
+
+  .glass-card {
+    @apply bg-white/90 backdrop-blur-xl border border-white/40 shadow-sm rounded-lg;
+  }
+
+  .glass-card-purple {
+    background: linear-gradient(135deg, hsla(270, 50%, 30%, 0.05), hsla(270, 50%, 40%, 0.02));
+    @apply backdrop-blur-xl border border-purple-200/20 shadow-sm rounded-lg;
+  }
+
+  .gradient-purple {
+    background: linear-gradient(135deg, hsl(270, 50%, 16%), hsl(270, 45%, 32%));
+  }
+
+  .gradient-hero {
+    background: linear-gradient(170deg, hsl(270, 50%, 12%) 0%, hsl(270, 45%, 22%) 40%, hsl(270, 40%, 30%) 100%);
+  }
+
+  .bg-dark-section {
+    background-color: hsl(var(--dark));
+  }
+
+  .bg-dark-surface {
+    background-color: hsl(var(--dark-surface));
+  }
+
+  .text-gradient-purple {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(270, 45%, 30%), hsl(270, 40%, 48%));
+  }
+
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(45, 95%, 45%), hsl(45, 85%, 58%));
+  }
+
+  .section-padding {
+    @apply py-20 md:py-32 px-4 md:px-8;
+  }
+
+  .accent-bar {
+    background-color: hsl(var(--accent));
+  }
+
+  .interactive-lift {
+    @apply transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl;
+  }
+
+  .inertia-panel {
+    transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1), background-color 320ms ease-out;
+  }
+
+  .card-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-shine::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.18) 18%, transparent 36%);
+    transform: translateX(-120%);
+    transition: transform 700ms ease;
+    pointer-events: none;
+  }
+
+  .card-shine:hover::before {
+    transform: translateX(120%);
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 3s linear infinite;
+    background-size: 200% 100%;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+}

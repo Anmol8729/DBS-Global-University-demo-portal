@@ -1,0 +1,718 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0 Calibri;}{\f1 Consolas;}}
+\viewkind4\uc1\pard\sa180\sl276\slmult1\f0\fs22
+\pard\sa240\sl300\slmult1\b\fs32 DGU Website System Design\b0\fs22\par
+\par
+\pard\sa220\sl280\slmult1\b\fs28 1. System Overview\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 `dgu.ac` is not just a brochure site. Based on the public website structure, it functions as a university discovery, admissions, and student-services platform with three distinct surfaces:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Public university website at `www.dgu.ac`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Admissions application flow at `admissions.dgu.ac`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Student operations handed off to `student.camu.in`\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 From the public site, DGU currently exposes:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Schools and a large program catalog\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Admission process pages, fee structures, scholarships, hostel and transport information, and refund policy\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab News Center with categories such as Campus News, Admission News, Placement News, and Events News\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Faculty directory and leadership pages\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Downloads and brochures\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab External integrations such as a virtual tour hosted on object storage and a separate student portal\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Architectural conclusion:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab DGU already behaves like a split-domain platform: `www` for discovery, `admissions` for applicant conversion, and an external student portal for post-admission operations.\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab The right backend target is a modular platform with clear bounded contexts: Public CMS, Admissions, Identity, Media, Notifications, and Student-system Integration.\par
+\par
+\pard\sa220\sl280\slmult1\b\fs28 2. Modules and Features\b0\fs22\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 2.1 Academic Module\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Features:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Schools management\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Programs and courses catalog\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Program variants and specializations\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Degree type support for UG, PG, Integrated, Diploma, PhD, and Certifications\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Faculty directory\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Research pages\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Academic calendar\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab School-specific landing pages\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 2.2 Admissions Module\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Features:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Admission process\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Program fee structures\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Scholarships\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Hostel and mess fees\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Transportation fee\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Refund policy\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Program commencement dates\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab International student admission\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab PhD admission\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Apply Now workflow\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Online interview and entrance-test handling\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Status tracking\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Application fee payment\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 2.3 Content and CMS Module\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Features:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab News categories:\par
+\pard\sa120\sl240\slmult1\f0\fs22   - Campus News\par
+\pard\sa120\sl240\slmult1\f0\fs22   - Admission News\par
+\pard\sa120\sl240\slmult1\f0\fs22   - Placement News\par
+\pard\sa120\sl240\slmult1\f0\fs22   - Events News\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Blogs and editorial pages\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Leadership and about pages\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Rankings and accreditation pages\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Office of International Affairs\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Campus life content\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Downloads and brochures\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 2.4 User Systems Module\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Features:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Visitor browsing\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Applicant registration and login\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Admin CMS access\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Faculty profile management\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Admissions counselor dashboard\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Student portal handoff and SIS integration\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Finance and fee payment integration\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Role-based access control\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 2.5 Media Module\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Features:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Image assets\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Brochure PDFs\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Video gallery\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Document downloads\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Virtual tour assets\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Program banners\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab News thumbnails\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 2.6 Enquiry and Lead Management Module\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Features:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Lead capture form\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Callback requests\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Counsellor assignment\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Source attribution\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Lead status\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Follow-up notes\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 2.7 Static vs Dynamic Areas\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Mostly static with CMS backing:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab About\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Rankings\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Accreditation\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Leadership\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Campus life\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Research overview\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Hostel information\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Refund policy\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Dynamic:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Programs catalog\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Faculty directory\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab News and events\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Downloads\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Admissions criteria by intake and year\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Application status\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Fee and payment status\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Counsellor forms\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Admin dashboard metrics\par
+\par
+\pard\sa220\sl280\slmult1\b\fs28 3. User Roles and Use Cases\b0\fs22\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 3.1 Visitor\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Actions:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Browse schools and programs\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Read admission requirements\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Download brochures\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Read news and events\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Submit enquiry forms\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Start application\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Backend operations:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Anonymous catalog reads\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab SEO page rendering\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab CDN asset delivery\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Lead capture and attribution\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Program filtering and search\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 3.2 Student or Applicant\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Actions:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Register and verify account\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Fill application\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Upload documents\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Pay application fee\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Track application status\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Book interview or test slot\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Backend operations:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Identity creation\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Draft autosave\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Eligibility validation\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Document storage\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Payment order and webhook handling\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Status history tracking\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Notification dispatch\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 3.3 Admin\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Actions:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Manage content\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Publish news and announcements\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Review applications\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Update admission statuses\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Assign counsellors\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Manage program and intake data\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab View dashboard analytics\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Backend operations:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab RBAC authorization\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab CMS publishing workflow\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Audit logs\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Cached dashboard aggregates\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Status transitions with validation rules\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 3.4 Faculty\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Actions:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Update profile\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab View assigned content or academic information\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Participate in interview workflows if required\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Backend operations:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Restricted profile edits\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Faculty directory publishing\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Review and decision workflow support\par
+\par
+\pard\sa220\sl280\slmult1\b\fs28 4. Frontend to Backend Interaction\b0\fs22\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 4.1 API Style\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Recommendation: REST-first architecture with optional GraphQL later for internal dashboard aggregation.\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Why:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Public content and program pages are highly cacheable and map well to REST\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Admissions workflows are stateful and easier to govern via REST resources\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab GraphQL is not necessary at initial scale and adds operational complexity\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 4.2 Data Flow\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Client -> CDN -> Next.js frontend -> API Gateway or BFF -> NestJS backend -> Redis cache -> PostgreSQL\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 For async operations:\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Backend -> Queue -> Notification workers / ERP sync / media processing\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 4.3 Example Endpoints\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Public:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `GET /api/v1/courses`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `GET /api/v1/courses/:slug`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `GET /api/v1/news`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `GET /api/v1/events`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `POST /api/v1/enquiries`\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Auth:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `POST /api/v1/auth/register`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `POST /api/v1/auth/login`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `POST /api/v1/auth/refresh`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `POST /api/v1/auth/forgot-password`\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Admissions:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `POST /api/v1/admissions/applications`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `GET /api/v1/admissions/applications/:id`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `PATCH /api/v1/admissions/applications/:id`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `POST /api/v1/admissions/applications/:id/documents`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `POST /api/v1/admissions/applications/:id/submit`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `GET /api/v1/admissions/applications/:id/status`\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Admin:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `GET /api/v1/admin/dashboard`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `GET /api/v1/admin/applications`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `PATCH /api/v1/admin/applications/:id/status`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `POST /api/v1/admin/posts`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `PATCH /api/v1/admin/posts/:id`\par
+\par
+\pard\sa220\sl280\slmult1\b\fs28 5. Backend Architecture\b0\fs22\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 5.1 Recommended Stack\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Backend framework: NestJS with TypeScript\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Frontend: Next.js\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Primary database: PostgreSQL\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Cache and queue backing: Redis\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Storage: S3-compatible object storage\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 5.2 Architecture Pattern\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Recommendation: Modular Monolith\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Why this fits DGU:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab DGU has medium complexity with shared domain data across admissions, content, and programs\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab University teams usually need lower operational overhead than microservices\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Admissions traffic is seasonal rather than continuously extreme\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Shared reporting and admin workflows are simpler in a modular monolith\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 5.3 Service Modules\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Auth Module\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Users and Roles Module\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Academic Module\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Programs Module\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Admissions Module\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab CMS Module\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Media Module\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Enquiries Module\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Notifications Module\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Payments Module\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Integrations Module\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Audit Module\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 5.4 File Storage Strategy\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Public bucket for brochures, public images, and thumbnails\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Private bucket for applicant documents\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Signed URLs for private asset access\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab CDN for public assets\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 5.5 Background Jobs\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Use queue workers for:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Email and SMS notifications\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Brochure download follow-ups\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Application submitted notifications\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Interview reminders\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Image optimization\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Malware scanning\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Cache invalidation\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab ERP sync retries\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Daily reporting jobs\par
+\par
+\pard\sa220\sl280\slmult1\b\fs28 6. Database Design\b0\fs22\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 6.1 Database Choice\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Recommendation: SQL-first architecture with PostgreSQL as the primary database.\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Why:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Strong relational integrity for admissions workflows\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Clear support for users, roles, applications, programs, and payments\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab JSONB can still support flexible metadata when needed\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Reliable indexing and partitioning for seasonal workloads\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Supporting systems:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Redis for cache, sessions, and rate limiting\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab S3 for file storage\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Optional OpenSearch later for full-text search\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 6.2 Core Tables\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `users`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `roles`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `user_roles`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `schools`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `departments`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `programs`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `program_specializations`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `intakes`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `applications`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `application_profiles`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `application_academics`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `application_documents`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `application_status_history`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `payments`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `faculty_profiles`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `posts`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `categories`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `events`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `media`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `downloads`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `enquiries`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `audit_logs`\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 6.3 Relationships\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab One user can have many applications\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Users and roles are many-to-many\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab One school can have many departments and programs\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab One program can have many intakes and specializations\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab One application can have many academic records, documents, status history records, and payments\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Media can be referenced by posts, faculty profiles, downloads, and application documents\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 6.4 Indexing Strategy\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Use indexes on:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `users(email)` unique\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `users(phone)` unique where not null\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `schools(slug)` unique\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `programs(slug)` unique\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `programs(school_id, level, status)`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `intakes(program_id, status, application_open_at, application_close_at)`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `applications(application_no)` unique\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `applications(user_id, created_at desc)`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `applications(program_id, current_status)`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `posts(slug)` unique\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `posts(type, status, published_at desc)`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `enquiries(status, created_at desc)`\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab `payments(provider_order_id)` unique\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 6.5 Normalization\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Use 3NF for transactional data\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Use controlled denormalization or materialized views for homepage cards, dashboards, and read-heavy reporting\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 6.6 Sample Schema\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f1\fs18
+CREATE TABLE schools (\par
+  id BIGSERIAL PRIMARY KEY,\par
+  slug VARCHAR(120) NOT NULL UNIQUE,\par
+  name VARCHAR(255) NOT NULL,\par
+  description TEXT,\par
+  sort_order INT NOT NULL DEFAULT 0,\par
+  is_active BOOLEAN NOT NULL DEFAULT TRUE\par
+);\par
+\par
+CREATE TABLE programs (\par
+  id BIGSERIAL PRIMARY KEY,\par
+  school_id BIGINT NOT NULL REFERENCES schools(id),\par
+  department_id BIGINT NULL,\par
+  slug VARCHAR(160) NOT NULL UNIQUE,\par
+  title VARCHAR(255) NOT NULL,\par
+  level VARCHAR(32) NOT NULL,\par
+  degree_type VARCHAR(64) NOT NULL,\par
+  duration_months INT NOT NULL,\par
+  mode VARCHAR(32) NOT NULL DEFAULT 'full_time',\par
+  overview TEXT,\par
+  eligibility_text TEXT,\par
+  intake_year INT NOT NULL,\par
+  status VARCHAR(32) NOT NULL DEFAULT 'active'\par
+);\par
+\par
+CREATE TABLE applications (\par
+  id BIGSERIAL PRIMARY KEY,\par
+  application_no VARCHAR(32) NOT NULL UNIQUE,\par
+  user_id BIGINT NOT NULL REFERENCES users(id),\par
+  intake_id BIGINT NOT NULL REFERENCES intakes(id),\par
+  program_id BIGINT NOT NULL REFERENCES programs(id),\par
+  current_status VARCHAR(32) NOT NULL DEFAULT 'draft',\par
+  payment_status VARCHAR(32) NOT NULL DEFAULT 'pending',\par
+  interview_status VARCHAR(32) NOT NULL DEFAULT 'not_required',\par
+  entrance_test_status VARCHAR(32) NOT NULL DEFAULT 'not_required',\par
+  final_decision VARCHAR(32),\par
+  submitted_at TIMESTAMP NULL,\par
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),\par
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()\par
+);\par
+\pard\sa180\sl276\slmult1\f0\fs22
+\par
+\pard\sa180\sl276\slmult1\b\fs24 6.7 Text ER Diagram\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f1\fs18
+User --< Application >-- Program --< Intake\par
+  |                          |\par
+  |                          +-- School\par
+  |\par
+  +--< UserRole >-- Role\par
+\par
+Application --< ApplicationAcademic\par
+Application --< ApplicationDocument >-- Media\par
+Application --< ApplicationStatusHistory\par
+Application --< Payment\par
+\par
+Post -- Category\par
+Post -- Media\par
+\par
+FacultyProfile -- School\par
+Download -- Media\par
+Enquiry -- Program\par
+\pard\sa180\sl276\slmult1\f0\fs22
+\par
+\pard\sa180\sl276\slmult1\b\fs24 6.8 Scaling Strategy\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Use read replicas for public reads and analytics\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Partition `applications` and `application_status_history` by intake year\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Do not shard initially\par
+\par
+\pard\sa220\sl280\slmult1\b\fs28 7. Backend Logic Flows\b0\fs22\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 7.1 Admission Flow\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Flow:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 1. Applicant registers\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 2. System creates user and applicant role\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 3. Verification email or SMS is sent\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 4. Applicant starts draft application\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 5. Program and intake are selected\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 6. Dynamic eligibility rules are loaded\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 7. Applicant fills profile and academics and uploads documents\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 8. Server validates required fields and checklist\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 9. Payment order is created\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 10. Payment webhook confirms success\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 11. Application moves from draft to submitted\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 12. Counsellor or admissions queue assignment happens\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 13. Eligibility engine determines interview, test, or direct shortlist\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 14. Status history is recorded\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 15. Notification is sent\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 16. Admin updates final decision\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 17. Accepted applicant is synced to SIS or ERP\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 7.2 Course Browsing Flow\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Flow:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 1. User filters by school, level, or specialization\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 2. API checks Redis cache for the filter signature\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 3. On miss, PostgreSQL query runs using indexed columns\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 4. API returns summary fields only\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 5. Program detail page is cached separately\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 7.3 CMS Update Flow\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Flow:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 1. Editor creates draft content\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 2. Optional review happens\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 3. Content is published or scheduled\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 4. Publish triggers cache invalidation and search refresh\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 5. Homepage and listing pages update\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 7.4 Authentication\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab JWT access tokens\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Refresh tokens in secure HTTP-only cookies\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab MFA mandatory for admins\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab RBAC for authorization\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Audit logs for protected actions\par
+\par
+\pard\sa220\sl280\slmult1\b\fs28 8. Performance and Scalability\b0\fs22\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 8.1 Caching\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Use Redis for:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Program listing cache\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab News feeds\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Faculty pages\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Admission rules cache\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Dashboard aggregate cache\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Rate limiting counters\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 8.2 CDN\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Use CDN for:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Images\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab PDFs and brochures\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab JavaScript and CSS\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Cached server-rendered pages\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 8.3 Load Balancing\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Application Load Balancer\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Horizontal autoscaling for app instances\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Separate scaling for workers\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 8.4 Peak Traffic Handling\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Admissions season strategies:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Pre-warm cache for top pages\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Queue all non-critical jobs\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Separate payment webhook processing\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Use DB connection pooling\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Add rate limiting to abusive endpoints\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Degrade gracefully if ERP sync is unavailable\par
+\par
+\pard\sa220\sl280\slmult1\b\fs28 9. Security Plan\b0\fs22\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 9.1 Auth and Authorization\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab RBAC for all protected APIs\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab MFA for admin and faculty back office\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Short-lived access tokens\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Rotating refresh tokens\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 9.2 Input Validation\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab DTO validation at API boundary\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Whitelisting of fields\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Server-side validation of academic and payment inputs\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Rich text sanitization for CMS\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 9.3 Protection Controls\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab SQL injection protection through parameterized queries\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab XSS protection via sanitization and CSP headers\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab CSRF protection for cookie-authenticated admin flows\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Rate limiting for login, OTP, enquiry, and application endpoints\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 9.4 Secure File Uploads\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Presigned upload URLs\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab MIME type validation\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Extension validation\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Size limits\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Antivirus scan\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Signed URLs for private retrieval\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 9.5 Audit and Compliance\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Audit admin status changes\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Audit content publication\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Keep immutable application history\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Encrypt sensitive data where required\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Mask PII in logs\par
+\par
+\pard\sa220\sl280\slmult1\b\fs28 10. Final Tech Stack\b0\fs22\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Backend: NestJS with TypeScript\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Frontend: Next.js\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Database: PostgreSQL\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Cache: Redis\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Queue: BullMQ\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Object storage: Amazon S3 or S3-compatible service\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab CDN: CloudFront or Cloudflare\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Search: PostgreSQL full-text initially, OpenSearch later\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab Infra: AWS ECS or EKS, RDS, ElastiCache, S3, ALB, WAF\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22\bullet\tab DevOps: Docker, GitHub Actions, Terraform, Sentry, Prometheus, Grafana\par
+\par
+\pard\sa220\sl280\slmult1\b\fs28 11. Bonus Implementation Details\b0\fs22\par
+\par
+\pard\sa180\sl276\slmult1\b\fs24 11.1 Suggested Backend Folder Structure\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f1\fs18
+src/\par
+  main.ts\par
+  app.module.ts\par
+  common/\par
+    config/\par
+    decorators/\par
+    dto/\par
+    exceptions/\par
+    guards/\par
+    interceptors/\par
+    utils/\par
+  modules/\par
+    auth/\par
+    users/\par
+    roles/\par
+    academics/\par
+      schools/\par
+      departments/\par
+      programs/\par
+      faculties/\par
+    admissions/\par
+      applications/\par
+      eligibility/\par
+      interviews/\par
+      documents/\par
+      payments/\par
+    cms/\par
+      posts/\par
+      categories/\par
+      pages/\par
+      homepage/\par
+    media/\par
+    enquiries/\par
+    notifications/\par
+    integrations/\par
+    audit/\par
+  database/\par
+    migrations/\par
+    seeds/\par
+\pard\sa180\sl276\slmult1\f0\fs22
+\par
+\pard\sa180\sl276\slmult1\b\fs24 11.2 Sample API Response\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f1\fs18
+\\{\par
+  "data": [\par
+    \\{\par
+      "id": 101,\par
+      "slug": "b-tech-cse-ai-ml-hcltech",\par
+      "title": "B.Tech in Computer Science and Engineering with Specialization in AI and ML - HCLTech",\par
+      "school": \\{\par
+        "slug": "doon-school-of-advanced-computing",\par
+        "name": "Doon School of Advanced Computing"\par
+      \\},\par
+      "level": "UG",\par
+      "durationMonths": 48\par
+    \\}\par
+  ],\par
+  "meta": \\{\par
+    "page": 1,\par
+    "pageSize": 20,\par
+    "total": 1\par
+  \\}\par
+\\}\par
+\pard\sa180\sl276\slmult1\f0\fs22
+\par
+\pard\sa180\sl276\slmult1\b\fs24 11.3 Sample Query\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f1\fs18
+SELECT\par
+  p.id,\par
+  p.slug,\par
+  p.title,\par
+  p.excerpt,\par
+  p.published_at\par
+FROM posts p\par
+WHERE p.type = 'campus_news'\par
+  AND p.status = 'published'\par
+ORDER BY p.published_at DESC\par
+LIMIT 12 OFFSET 0;\par
+\pard\sa180\sl276\slmult1\f0\fs22
+\par
+\pard\sa180\sl276\slmult1\b\fs24 11.4 Future Scaling Path\b0\fs22\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Extract services later only if needed. Best first candidates:\par
+\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 1. Notifications\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 2. Media\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 3. Search\par
+\pard\li360\fi-180\sa120\sl240\slmult1\f0\fs22 4. Admissions workflow\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Current recommendation remains:\par
+\par
+\pard\sa120\sl240\slmult1\f0\fs22 Next.js frontend plus a NestJS modular monolith with PostgreSQL, Redis, S3, queue workers, and SIS and payment integrations.\par
+}
+
