@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: dgu-admissions-backend
+
+  data:
+    mongodb:
+      # Set MONGODB_URI environment variable, or replace with your connection string
+      uri: ${MONGODB_URI:mongodb://localhost:27017/dgu_admissions}
+      database: dgu_admissions
+
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+
+logging:
+  level:
+    ac.dgu: DEBUG
+    org.springframework.data.mongodb: INFO

@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import dbsLogo from "@/assets/dbs-logo.png";
+import ApplyNowModal from "./ApplyNowModal";
 
 const navItems = [
   { label: "Home", path: "/" },
@@ -50,6 +51,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [applyOpen, setApplyOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -67,8 +69,8 @@ const Navbar = () => {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-white shadow-lg shadow-primary/5 border-b border-border"
-          : "bg-white/80 backdrop-blur-md"
+          ? "bg-white/85 backdrop-blur-xl shadow-lg shadow-primary/5 border-b border-border"
+          : "bg-white/70 backdrop-blur-xl"
       }`}
     >
       <div className="container mx-auto flex items-center justify-between px-6 py-3">
@@ -124,14 +126,12 @@ const Navbar = () => {
             </div>
           ))}
 
-          <a
-            href="https://admissions.dgu.ac/"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={() => setApplyOpen(true)}
             className="ml-6 px-6 py-2.5 bg-primary text-primary-foreground text-xs font-bold font-body uppercase tracking-wider rounded-full hover:bg-purple-vivid transition-colors"
           >
             Apply Now
-          </a>
+          </button>
         </div>
 
         <button
@@ -161,18 +161,18 @@ const Navbar = () => {
                   </Link>
                 </div>
               ))}
-              <a
-                href="https://admissions.dgu.ac/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-center mt-6 px-5 py-3 bg-primary text-primary-foreground text-sm font-bold font-body rounded-full"
+              <button
+                onClick={() => { setIsOpen(false); setApplyOpen(true); }}
+                className="block w-full text-center mt-6 px-5 py-3 bg-primary text-primary-foreground text-sm font-bold font-body rounded-full"
               >
                 Apply Now
-              </a>
+              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ApplyNowModal open={applyOpen} onOpenChange={setApplyOpen} />
     </nav>
   );
 };

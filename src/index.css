@@ -176,3 +176,84 @@
     100% { background-position: -200% 0; }
   }
 }
+
+/* ── Scroll animation ── */
+@keyframes scroll-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-scroll-left {
+  animation: scroll-left 28s linear infinite;
+}
+
+/* ── Hero gradient text ── */
+.text-gradient-hero {
+  background: linear-gradient(135deg, #fff 0%, #f1d9ab 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Gradient counter numbers (stats ribbon) ── */
+.text-gradient-stat {
+  background: linear-gradient(135deg, #c084fc 0%, #f5c842 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Scroll-down chevron bounce ── */
+@keyframes bounce-arrow {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50%       { transform: translateY(8px); opacity: 1; }
+}
+.animate-bounce-arrow {
+  animation: bounce-arrow 1.6s ease-in-out infinite;
+}
+
+/* ── Active slide dot pulse glow ── */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0px rgba(245,200,66,0.4), 0 0 6px rgba(245,200,66,0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(245,200,66,0.25), 0 0 14px rgba(245,200,66,0.5);
+  }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ── Stats ribbon grow line ── */
+@keyframes grow-line {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.animate-grow-line {
+  transform-origin: left;
+  animation: grow-line 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ── Footer animated gradient ── */
+@keyframes footer-gradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.footer-animated-bg {
+  background: linear-gradient(270deg, #0f0720, #1a0a2e, #0f0720, #160830);
+  background-size: 400% 400%;
+  animation: footer-gradient 10s ease infinite;
+}
+
+/* ── Reduced motion overrides ── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-scroll-left,
+  .animate-bounce-arrow,
+  .animate-pulse-glow,
+  .animate-grow-line,
+  .footer-animated-bg {
+    animation: none !important;
+  }
+}

@@ -5,6 +5,7 @@ import {
   ArrowRight,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   GraduationCap,
   Cpu,
   BookOpen,
@@ -30,8 +31,10 @@ import {
   Theater,
   Flower2,
   TreePine,
+  Megaphone,
 } from "lucide-react";
 import Layout from "@/components/Layout";
+import ApplyNowButton from "@/components/ApplyNowButton";
 import heroCampusImg from "@/assets/hero-campus.jpg";
 
 const lawSchoolImage = "https://dgu.ac/thumb/1400x560/images/header-images/home/hd-08.jpg";
@@ -67,14 +70,16 @@ const schools = [
   { name: "School of Agriculture", icon: Sprout, link: "/programs#agriculture", programs: ["B.Sc Agriculture", "B.Sc Forestry", "M.Sc Agronomy"], image: "https://www.dgu.ac/thumb/350x350/images/pictures/header-pictures/9.jpg", color: "from-purple-vivid to-purple-light", description: "Applied agricultural education rooted in sustainability, field learning, and modern farming science." },
   { name: "School of Future Skills", icon: Lightbulb, link: "/programs#futureskills", programs: ["SAP", "SAS", "Artificial Intelligence"], image: "https://www.dgu.ac/thumb/350x350/images/pictures/header-pictures/7.jpg", color: "from-purple-deep to-primary", description: "Specialized skill tracks aligned with emerging tools, enterprise platforms, and industry demand." },
   { name: "School of Law", icon: Scale, link: "/programs#law", programs: ["BA LLB (Hons.)", "BBA LLB", "LLM"], image: lawSchoolImage, color: "from-primary to-purple-vivid", description: "Rigorous legal education that blends academic depth, advocacy, ethics, and contemporary practice." },
-  { name: "School of Nursing", icon: HeartPulse, link: "/programs#nursing", programs: ["GNM"], image: "https://www.dgu.ac/thumb/700x350/images/pictures/header-pictures/33.jpg", color: "from-purple-vivid to-purple-light", description: "Compassion-led clinical training that prepares students for real care environments and community health." },
+  { name: "School of Hotel Management", icon: UtensilsCrossed, link: "/programs#hotel", programs: ["Bachelor of Hotel Management", "MBA Hospitality"], image: "https://www.dgu.ac/thumb/700x700/images/pictures/header-pictures/29.jpg", color: "from-purple-vivid to-purple-light", description: "Hospitality programs preparing students for leadership roles in the global hotel and tourism industry." },
+  { name: "School of Health Sciences", icon: Stethoscope, link: "/programs#healthsciences", programs: ["Medical Lab Technology", "Cardiovascular Technology", "MBA Healthcare"], image: "https://www.dgu.ac/thumb/350x350/images/pictures/header-pictures/33.jpg", color: "from-purple-deep to-primary", description: "Allied health science programs combining clinical training with modern healthcare technology." },
+  { name: "School of Nursing", icon: HeartPulse, link: "/programs#nursing", programs: ["GNM"], image: "https://www.dgu.ac/thumb/700x350/images/pictures/header-pictures/33.jpg", color: "from-primary to-purple-vivid", description: "Compassion-led clinical training that prepares students for real care environments and community health." },
 ];
 
 /* ── Stats ── */
 const stats = [
-  { end: 9, suffix: "", label: "Schools of Excellence" },
+  { end: 11, suffix: "", label: "Schools of Excellence" },
   { end: 350, suffix: "+", label: "Recruiting Partners" },
-  { end: 30, suffix: "+", label: "Academic Programs" },
+  { end: 80, suffix: "+", label: "Academic Programs" },
   { end: 95, suffix: "%", label: "Placement Rate" },
 ];
 
@@ -246,6 +251,50 @@ const SectionHeader = ({ subtitle, title, description, light = false, center = t
   </ScrollReveal>
 );
 
+/* ── Stat Counter — own component so hook is called at top level ── */
+const StatCounter = ({ end, suffix, label }: { end: number; suffix: string; label: string }) => {
+  const { count, ref } = useCounter(end, 2000);
+  return (
+    <div ref={ref} className="text-center">
+      <div className="text-4xl md:text-6xl font-display font-bold text-gradient-stat">
+        {count}{suffix}
+      </div>
+      <div className="text-sm text-white/60 mt-2 font-body uppercase tracking-widest">{label}</div>
+    </div>
+  );
+};
+
+/* ── 3D Tilt Card wrapper ── */
+const TiltCard = ({ children }: { children: React.ReactNode }) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width  - 0.5;
+    const y = (e.clientY - rect.top)  / rect.height - 0.5;
+    el.style.transform = `perspective(1000px) rotateY(${x * 8}deg) rotateX(${-y * 6}deg) translateZ(4px)`;
+  };
+
+  const handleMouseLeave = () => {
+    if (ref.current) {
+      ref.current.style.transform = "perspective(1000px) rotateY(0deg) rotateX(0deg) translateZ(0px)";
+    }
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ transition: "transform 200ms ease-out", willChange: "transform" }}
+    >
+      {children}
+    </div>
+  );
+};
+
 /* ── Main Component ── */
 const Index = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -255,25 +304,39 @@ const Index = () => {
   const heroImageY = useTransform(scrollY, [0, 500], [0, 120]);
   const heroContentY = useTransform(scrollY, [0, 500], [0, 60]);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setHeroSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5500);
-
-    return () => clearInterval(timer);
-  }, []);
-
+  // Define scrollToTestimonial BEFORE the useEffect that references it
   const scrollToTestimonial = (index: number) => {
     const container = testimonialScrollerRef.current;
     const target = container?.children[index] as HTMLElement | undefined;
     if (!container || !target) return;
-
-    container.scrollTo({
-      left: target.offsetLeft,
-      behavior: "smooth",
-    });
+    container.scrollTo({ left: target.offsetLeft, behavior: "smooth" });
     setActiveTestimonial(index);
   };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5500);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Keyboard navigation — uses a ref to avoid stale closure
+  const activeTestimonialRef = useRef(activeTestimonial);
+  activeTestimonialRef.current = activeTestimonial;
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      const cur = activeTestimonialRef.current;
+      if (e.key === "ArrowLeft") {
+        scrollToTestimonial((cur - 1 + testimonials.length) % testimonials.length);
+      } else if (e.key === "ArrowRight") {
+        scrollToTestimonial((cur + 1) % testimonials.length);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleTestimonialScroll = () => {
     const container = testimonialScrollerRef.current;
@@ -318,6 +381,10 @@ const Index = () => {
         </AnimatePresence>
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(22,11,37,0.88)_0%,rgba(34,18,54,0.68)_42%,rgba(34,18,54,0.28)_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,209,102,0.18),transparent_22%)]" />
+        {/* Subtle grain overlay */}
+        <div className="pointer-events-none absolute inset-0 opacity-[0.03]"
+          style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")" }}
+        />
 
         <div className="relative container mx-auto px-6 py-24 md:py-32 lg:py-40">
           <motion.div style={{ y: heroContentY }} className="grid items-end gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -343,14 +410,10 @@ const Index = () => {
               </AnimatePresence>
 
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <a
-                  href="https://admissions.dgu.ac/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group interactive-lift inline-flex items-center justify-center gap-2 rounded-full bg-accent px-8 py-4 text-sm font-body font-bold uppercase tracking-[0.18em] text-accent-foreground"
-                >
-                  Apply Now <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
+                <ApplyNowButton
+                  variant="accent"
+                  className="group interactive-lift justify-center uppercase tracking-[0.18em] font-bold"
+                />
                 <Link
                   to="/programs"
                   className="group interactive-lift inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-8 py-4 text-sm font-body font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md hover:bg-white/16"
@@ -365,7 +428,11 @@ const Index = () => {
                     key={slide.eyebrow}
                     type="button"
                     onClick={() => setHeroSlide(index)}
-                    className={`rounded-full transition-all duration-300 ${index === heroSlide ? "h-2.5 w-10 bg-accent" : "h-2.5 w-2.5 bg-white/35 hover:bg-white/55"}`}
+                    className={`rounded-full transition-all duration-300 ${
+                      index === heroSlide
+                        ? "h-2.5 w-10 bg-accent animate-pulse-glow"
+                        : "h-2.5 w-2.5 bg-white/35 hover:bg-white/55"
+                    }`}
                     aria-label={`Go to hero slide ${index + 1}`}
                   />
                 ))}
@@ -374,8 +441,8 @@ const Index = () => {
 
               <div className="mt-12 grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-3"> 
                 {[
-                  { value: "9", label: "Schools" },
-                  { value: "30+", label: "Programs" },
+                  { value: "11", label: "Schools" },
+                  { value: "80+", label: "Programs" },
                   { value: "350+", label: "Recruiters" },
                 ].map((item, index) => (
                   <motion.div
@@ -392,37 +459,105 @@ const Index = () => {
             </div>
 
             <motion.div
-              whileHover={{ y: -10, rotateX: 1, rotateY: -1 }}
+              whileHover={{ y: -6 }}
               transition={{ duration: 0.35, ease: "easeOut" }}
-              className="relative hidden lg:block"
+              className="relative hidden lg:flex flex-col items-center gap-6"
             >
-              <div className="absolute -left-10 top-12 h-40 w-40 rounded-full bg-accent/20 blur-3xl" />
-              <div className="absolute -right-4 bottom-10 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
-              <div className="relative overflow-hidden rounded-[36px] border border-white/15 bg-white/10 p-3 shadow-2xl shadow-black/30 backdrop-blur-xl">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={`panel-${heroSlide}`}
-                    src={heroSlides[(heroSlide + 1) % heroSlides.length].image}
-                    alt="Academic block and student spaces"
-                    className="h-[560px] w-full rounded-[28px] object-cover"
-                    loading="lazy"
-                    initial={{ opacity: 0, scale: 1.06 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.98 }}
-                    transition={{ duration: 0.8 }}
+              {/* Campus image panel */}
+              <div className="relative w-full max-w-[480px]">
+                {/* Glow blobs */}
+                <div className="absolute -left-10 top-12 h-40 w-40 rounded-full bg-accent/25 blur-3xl pointer-events-none" />
+                <div className="absolute -right-4 bottom-10 h-48 w-48 rounded-full bg-purple-500/20 blur-3xl pointer-events-none" />
+
+                {/* Outer decorative ring */}
+                <div className="absolute inset-0 rounded-[36px] border border-accent/30 scale-[1.04] pointer-events-none" />
+
+                {/* Main image card */}
+                <div className="relative overflow-hidden rounded-[36px] border border-white/20 shadow-2xl shadow-black/40">
+                  <img
+                    src="https://www.dgu.ac/thumb/1920x1080/images/header-images/about-us/about-dbsgu/1.jpg"
+                    alt="DBS Global University Campus"
+                    className="w-full h-[420px] object-cover"
                   />
-                </AnimatePresence>
-                <div className="absolute inset-x-10 bottom-10 rounded-[28px] border border-white/15 bg-[linear-gradient(135deg,rgba(255,255,255,0.16),rgba(255,255,255,0.06))] p-6 backdrop-blur-xl">
-                  <blockquote className="text-white font-display text-2xl italic">
-                    "Education is the most powerful weapon which you can use to change the world."
-                    <footer className="mt-2 text-sm text-[#f1d9ab]">- Nelson Mandela</footer>
-                  </blockquote>
+                  {/* Gradient overlay — bottom fade */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1a0a2e]/70 via-transparent to-transparent" />
+
+                  {/* Gold wireframe SVG overlay — decorative */}
+                  <svg
+                    className="absolute inset-0 w-full h-full pointer-events-none opacity-20"
+                    viewBox="0 0 480 420"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle cx="240" cy="210" r="160" stroke="#f5c842" strokeWidth="1" />
+                    <circle cx="240" cy="210" r="120" stroke="#f5c842" strokeWidth="0.6" strokeDasharray="4 6" />
+                    <line x1="80" y1="210" x2="400" y2="210" stroke="#f5c842" strokeWidth="0.5" />
+                    <line x1="240" y1="50" x2="240" y2="370" stroke="#f5c842" strokeWidth="0.5" />
+                    <line x1="127" y1="97" x2="353" y2="323" stroke="#f5c842" strokeWidth="0.5" />
+                    <line x1="353" y1="97" x2="127" y2="323" stroke="#f5c842" strokeWidth="0.5" />
+                  </svg>
+
+                  {/* Floating stat badge — top right */}
+                  <div className="absolute top-5 right-5 rounded-2xl border border-white/20 bg-black/40 backdrop-blur-md px-4 py-3">
+                    <p className="text-2xl font-display font-bold text-accent leading-none">350+</p>
+                    <p className="text-[10px] font-body uppercase tracking-widest text-white/60 mt-1">Recruiters</p>
+                  </div>
+
+                  {/* Floating stat badge — bottom left */}
+                  <div className="absolute bottom-5 left-5 rounded-2xl border border-white/20 bg-black/40 backdrop-blur-md px-4 py-3">
+                    <p className="text-2xl font-display font-bold text-accent leading-none">95%</p>
+                    <p className="text-[10px] font-body uppercase tracking-widest text-white/60 mt-1">Placement Rate</p>
+                  </div>
                 </div>
+              </div>
+
+              {/* Quote below image */}
+              <div className="w-full max-w-[480px] rounded-[28px] border border-white/15 bg-[linear-gradient(135deg,rgba(255,255,255,0.10),rgba(255,255,255,0.03))] p-6 backdrop-blur-xl">
+                <blockquote className="text-white font-display text-lg italic">
+                  "Education is the most powerful weapon which you can use to change the world."
+                  <footer className="mt-2 text-sm text-[#f1d9ab]">— Nelson Mandela</footer>
+                </blockquote>
               </div>
             </motion.div>
           </motion.div>
         </div>
+
+        {/* Scroll-down chevron */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none">
+          <span className="text-[10px] font-body uppercase tracking-[0.25em] text-white/40">Scroll</span>
+          <ChevronDown className="h-5 w-5 text-white/50 animate-bounce-arrow" />
+        </div>
       </section>
+      {/* ═══════ ANNOUNCEMENT BANNER — MBA Winter Batch ═══════ */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        className="bg-gradient-to-r from-accent via-[#f5c842] to-accent"
+      >
+        <div className="container mx-auto px-6 py-3.5">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
+            <div className="flex items-center gap-2">
+              <Megaphone className="h-4 w-4 text-foreground/80 flex-shrink-0" />
+              <span className="text-sm font-body font-bold text-foreground/90 uppercase tracking-[0.15em]">
+                Registration Open
+              </span>
+            </div>
+            <span className="hidden sm:block text-foreground/50">·</span>
+            <span className="text-sm font-body font-semibold text-foreground/80">
+              MBA Winter Batch 2026–2028 — Apply Now
+            </span>
+            <a
+              href="https://admissions.dgu.ac/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full bg-foreground/15 border border-foreground/20 px-4 py-1.5 text-xs font-body font-bold text-foreground hover:bg-foreground/25 transition-colors"
+            >
+              Apply Now <ArrowRight className="h-3 w-3" />
+            </a>
+          </div>
+        </div>
+      </motion.div>
       {/* ═══════ WELCOME SECTION — SOAS Style ═══════ */}
       <section className="bg-background">
         <div className="container mx-auto px-6 py-20 md:py-28">
@@ -481,7 +616,7 @@ const Index = () => {
           </ScrollReveal>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-14">
             {[
-              { value: "9", label: "Schools of Excellence", desc: "From Business to Agriculture, Law to Computing — nine specialized schools." },
+              { value: "11", label: "Schools of Excellence", desc: "From Business to Agriculture, Law to Computing — eleven specialized schools." },
               { value: "350+", label: "Recruiting Partners", desc: "Top companies recruit from our campus including Deloitte, TCS, Wipro, and more." },
               { value: "95%", label: "Placement Rate", desc: "Our dedicated placement cell ensures every student is industry-ready." },
             ].map((item, i) => (
@@ -511,56 +646,58 @@ const Index = () => {
               const Icon = school.icon;
               return (
                 <ScrollReveal key={school.name} delay={i * 0.07}>
-                  <Link
-                    to={school.link}
-                    className="group card-shine inertia-panel flex h-full flex-col overflow-hidden rounded-[30px] border border-[#e9dfcf] bg-white shadow-[0_18px_50px_rgba(49,30,74,0.06)] hover:-translate-y-2 hover:shadow-[0_30px_80px_rgba(49,30,74,0.14)]"
-                  >
-                    <div className="relative aspect-[16/11] overflow-hidden">
-                      <img
-                        src={school.image}
-                        alt={school.name}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div className={`absolute inset-0 bg-gradient-to-t ${school.color} opacity-70 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-80`} />
-                      <div className="absolute left-5 top-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/25 bg-white/15 text-white backdrop-blur-md">
-                        <Icon className="h-6 w-6" />
-                      </div>
-                    </div>
-
-                    <div className="flex flex-1 flex-col p-6 md:p-7">
-                      <div>
-                        <p className="text-xs font-body font-semibold uppercase tracking-[0.22em] text-primary/55">
-                          School {String(i + 1).padStart(2, "0")}
-                        </p>
-                        <h3 className="mt-3 text-2xl font-display font-bold leading-tight text-foreground">
-                          {school.name}
-                        </h3>
-                        <p className="mt-4 text-sm font-body leading-7 text-muted-foreground">
-                          {school.description}
-                        </p>
+                  <TiltCard>
+                    <Link
+                      to={school.link}
+                      className="group card-shine inertia-panel flex h-full flex-col overflow-hidden rounded-[30px] border border-[#e9dfcf] bg-white shadow-[0_18px_50px_rgba(49,30,74,0.06)] hover:shadow-[0_30px_80px_rgba(49,30,74,0.14)]"
+                    >
+                      <div className="relative aspect-[16/11] overflow-hidden">
+                        <img
+                          src={school.image}
+                          alt={school.name}
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className={`absolute inset-0 bg-gradient-to-t ${school.color} opacity-70 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-80`} />
+                        <div className="absolute left-5 top-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/25 bg-white/15 text-white backdrop-blur-md">
+                          <Icon className="h-6 w-6" />
+                        </div>
                       </div>
 
-                      <div className="mt-6 flex flex-wrap gap-2">
-                        {school.programs.slice(0, 4).map((program) => (
-                          <span
-                            key={program}
-                            className="rounded-full border border-[#eadfce] bg-[#faf6ef] px-3 py-1.5 text-[11px] font-body font-semibold uppercase tracking-[0.12em] text-primary/75"
-                          >
-                            {program}
+                      <div className="flex flex-1 flex-col p-6 md:p-7">
+                        <div>
+                          <p className="text-xs font-body font-semibold uppercase tracking-[0.22em] text-primary/55">
+                            School {String(i + 1).padStart(2, "0")}
+                          </p>
+                          <h3 className="mt-3 text-2xl font-display font-bold leading-tight text-foreground">
+                            {school.name}
+                          </h3>
+                          <p className="mt-4 text-sm font-body leading-7 text-muted-foreground">
+                            {school.description}
+                          </p>
+                        </div>
+
+                        <div className="mt-6 flex flex-wrap gap-2">
+                          {school.programs.slice(0, 4).map((program) => (
+                            <span
+                              key={program}
+                              className="rounded-full border border-[#eadfce] bg-[#faf6ef] px-3 py-1.5 text-[11px] font-body font-semibold uppercase tracking-[0.12em] text-primary/75"
+                            >
+                              {program}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="mt-8 flex items-center justify-between border-t border-[#efe7da] pt-5">
+                          <span className="text-sm font-body font-semibold text-primary transition-transform duration-300 group-hover:translate-x-1">
+                            Learn More
                           </span>
-                        ))}
+                          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground transition-colors duration-300 group-hover:bg-accent group-hover:text-accent-foreground">
+                            <ArrowRight className="h-4 w-4" />
+                          </span>
+                        </div>
                       </div>
-
-                      <div className="mt-8 flex items-center justify-between border-t border-[#efe7da] pt-5">
-                        <span className="text-sm font-body font-semibold text-primary transition-transform duration-300 group-hover:translate-x-1">
-                          Learn More
-                        </span>
-                        <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground transition-colors duration-300 group-hover:bg-accent group-hover:text-accent-foreground">
-                          <ArrowRight className="h-4 w-4" />
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </TiltCard>
                 </ScrollReveal>
               );
             })}
@@ -594,21 +731,27 @@ const Index = () => {
       </section>
 
       {/* ═══════ STATS RIBBON ═══════ */}
-      <section className="bg-gradient-to-r from-primary via-purple-vivid to-primary">
-        <div className="container mx-auto px-6 py-14 md:py-20">
+      <section className="relative overflow-hidden bg-gradient-to-r from-primary via-purple-vivid to-primary">
+        <div className="relative container mx-auto px-6 py-14 md:py-20">
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-10 h-px w-full origin-left bg-gradient-to-r from-transparent via-accent/60 to-transparent"
+          />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, i) => {
-              const { count, ref } = useCounter(stat.end, 2000);
-              return (
-                <div key={i} ref={ref} className="text-center">
-                  <div className="text-4xl md:text-6xl font-display font-bold text-white">
-                    {count}{stat.suffix}
-                  </div>
-                  <div className="text-sm text-white/60 mt-2 font-body uppercase tracking-widest">{stat.label}</div>
-                </div>
-              );
-            })}
+            {stats.map((stat, i) => (
+              <StatCounter key={i} end={stat.end} suffix={stat.suffix} label={stat.label} />
+            ))}
           </div>
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            className="mt-10 h-px w-full origin-left bg-gradient-to-r from-transparent via-accent/60 to-transparent"
+          />
         </div>
       </section>
 
@@ -702,7 +845,7 @@ const Index = () => {
                             <img
                               src={testimonial.image}
                               alt={testimonial.name}
-                              className="h-20 w-20 rounded-[24px] object-cover ring-4 ring-primary/10"
+                              className="h-20 w-20 rounded-[24px] object-cover ring-4 ring-primary/10 transition-all duration-500 group-hover:ring-accent/40 group-hover:shadow-[0_0_20px_rgba(245,200,66,0.35)]"
                             />
                             <div className="rounded-2xl bg-primary/10 p-3 text-primary">
                               <Quote className="h-5 w-5" />

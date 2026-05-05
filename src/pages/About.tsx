@@ -59,7 +59,7 @@ const About = () => {
                 DGU is equipped with state-of-the-art educational and training facilities supervised and coordinated by highly trained coordinators. Everything you need to obtain a world-class education is available at DBSGU.
               </p>
               <p className="text-muted-foreground leading-relaxed font-body">
-                The university offers nine schools with over 30 programs, partnering with industry leaders like HCLTech and ICAI to deliver practical, industry-relevant education.
+                The university offers eleven schools with over 80 programs, partnering with industry leaders like HCLTech and ICAI to deliver practical, industry-relevant education.
               </p>
             </ScrollReveal>
           </div>
@@ -105,9 +105,9 @@ const About = () => {
         <div className="container mx-auto px-6 py-14 md:py-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { value: "9", label: "Schools" },
+              { value: "11", label: "Schools" },
               { value: "350+", label: "Recruiting Companies" },
-              { value: "30+", label: "Programs" },
+              { value: "80+", label: "Programs" },
               { value: "5th", label: "Finance Mgmt Ranking" },
             ].map((s, i) => (
               <ScrollReveal key={i} delay={i * 0.1}>
@@ -118,6 +118,24 @@ const About = () => {
               </ScrollReveal>
             ))}
           </div>
+          {/* Recognition row */}
+          <ScrollReveal delay={0.4}>
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                { title: "India Today Ranked", desc: "Best Institution in North India for Management Programs" },
+                { title: "5th — Finance Management", desc: "India's Top 10 Promising Finance Management Universities 2025" },
+                { title: "EAIE 2025 — Sweden", desc: "International presence at the European Association for International Education Conference" },
+              ].map((r, i) => (
+                <div key={i} className="flex items-start gap-3 rounded-xl border border-white/15 bg-white/8 px-5 py-4">
+                  <div className="mt-0.5 h-2 w-2 rounded-full bg-accent flex-shrink-0" />
+                  <div>
+                    <p className="text-white font-display font-semibold text-sm">{r.title}</p>
+                    <p className="text-white/55 text-xs font-body mt-0.5 leading-relaxed">{r.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 

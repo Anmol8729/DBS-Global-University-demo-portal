@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+
+  <!-- White background -->
+  <rect width="64" height="64" rx="10" fill="#ffffff"/>
+
+  <!-- Top double rule -->
+  <rect x="7" y="13" width="50" height="2.2" fill="#5b2d8e"/>
+  <rect x="7" y="16.5" width="50" height="1"  fill="#5b2d8e"/>
+
+  <!-- Bottom double rule -->
+  <rect x="7" y="46.5" width="50" height="1"  fill="#5b2d8e"/>
+  <rect x="7" y="49"   width="50" height="2.2" fill="#5b2d8e"/>
+
+  <!-- "DBS" in purple serif -->
+  <text
+    x="32"
+    y="41"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="21"
+    font-weight="700"
+    letter-spacing="0.5"
+    fill="#5b2d8e"
+  >DBS</text>
+
+  <!--
+    Red arrow: originates near bottom-left of the "B",
+    travels diagonally up-right through the letters,
+    exits top-right with an arrowhead — matching the real logo.
+  -->
+  <line
+    x1="26" y1="50"
+    x2="42" y2="10"
+    stroke="#e02020"
+    stroke-width="3.2"
+    stroke-linecap="round"
+  />
+  <!-- Zigzag notch (the "step" in the arrow shaft) -->
+  <polyline
+    points="33,31  37,27  33,27"
+    fill="none"
+    stroke="#e02020"
+    stroke-width="3.2"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+  />
+  <!-- Arrowhead at top -->
+  <polygon
+    points="42,10  37,16  45,17"
+    fill="#e02020"
+  />
+
+</svg>
