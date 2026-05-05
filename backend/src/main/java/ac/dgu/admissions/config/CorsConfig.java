@@ -21,8 +21,10 @@ public class CorsConfig {
         config.setAllowedOriginPatterns(List.of(
             "http://localhost:*",
             "http://127.0.0.1:*",
+            "https://*.vercel.app",
             "https://*.dgu.ac",
-            "https://www.dgu.ac"
+            "https://www.dgu.ac",
+            "${FRONTEND_URL:http://localhost:5173}"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
