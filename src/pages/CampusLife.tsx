@@ -113,7 +113,6 @@ const CampusLife = () => {
                 title="Campus Tour"
                 className="w-full h-full"
                 allow="fullscreen; gyroscope; accelerometer"
-                allowFullScreen
                 loading="lazy"
               />
             </div>

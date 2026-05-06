@@ -1,6 +1,8 @@
 package ac.dgu.admissions.exception;
 
 import ac.dgu.admissions.dto.ApiResponse;
+import com.mongodb.MongoException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -50,9 +52,20 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getMessage()));
     }
 
+    /** MongoDB connection / query errors */
+    @ExceptionHandler({MongoException.class, DataAccessException.class})
+    public ResponseEntity<ApiResponse<Void>> handleMongoError(Exception ex) {
+        log.severe("MongoDB error: " + ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(ApiResponse.error(
+                    "Database connection error. Please check MONGODB_URI environment variable."));
+    }
+
+    /** Catch-all */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGeneric(Exception ex) {
-        log.severe("Unexpected error: " + ex.getMessage());
+        log.severe("Unexpected error [" + ex.getClass().getSimpleName() + "]: " + ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.error("An unexpected error occurred. Please try again later."));
