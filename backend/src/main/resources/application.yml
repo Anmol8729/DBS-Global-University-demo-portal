@@ -8,7 +8,6 @@ spring:
   data:
     mongodb:
       uri: ${MONGODB_URI:mongodb://localhost:27017/dgu_admissions}
-      database: dgu_admissions
 
   jackson:
     default-property-inclusion: non_null
